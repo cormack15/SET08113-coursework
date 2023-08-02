@@ -36,7 +36,7 @@ public class App
                 // Wait a bit for db to start
                 Thread.sleep(30000);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/employees?useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://db:3306/world?useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -80,9 +80,9 @@ public class App
             Statement stmt = con.createStatement();
 
             // Create the SQL query string to retrieve country information ordered by population
-            String strSelect = "SELECT code, name, population "
+            String strSelect = "SELECT Code, Name, Continent, Region, Population, Capital "
                     + "FROM country "
-                    + "ORDER BY population DESC";
+                    + "ORDER BY Population DESC";
 
             // Execute the SQL statement and retrieve the result set
             ResultSet rset = stmt.executeQuery(strSelect);
@@ -90,9 +90,12 @@ public class App
             // Iterate through the result set and populate the list of countries
             while (rset.next()) {
                 Country country = new Country();
-                country.code = rset.getString("code");
-                country.name = rset.getString("name");
-                country.population = rset.getInt("population");
+                country.code = rset.getString("Code");
+                country.name = rset.getString("Name");
+                country.continent = rset.getString("Continent");
+                country.region = rset.getString("Region");
+                country.population = rset.getInt("Population");
+                country.capital = rset.getString("Capital");
                 countries.add(country);
             }
 
@@ -105,6 +108,16 @@ public class App
         return countries;
     }
 
+    public void displayCountries(List<Country> countries)
+    {
+        // Print the header
+        System.out.println("Code | Name | Continet | Region | Population | Capital");
+        for (Country country : countries)
+        {
+            System.out.println(country.code + " | " + country.name + " | " + country.continent + " | " + country.region + " | " + country.population + " | " + country.capital);
+        }
+    }
+
     public static void main(String[] args)
     {
         // Create new Application
@@ -112,6 +125,12 @@ public class App
 
         // Connect to database
         a.connect();
+
+        // Get countries ordered by population
+        List<Country> countries = a.getCountriesByPopulation();
+
+        // Display countries information
+        a.displayCountries(countries);
 
         // Disconnect from database
         a.disconnect();

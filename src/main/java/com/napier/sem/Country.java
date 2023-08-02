@@ -14,7 +14,7 @@ public class Country {
     /**
      * Country's Continent
      */
-    public String continient;
+    public String continent;
 
     /**
      * Country's Region
