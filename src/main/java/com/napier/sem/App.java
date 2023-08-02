@@ -118,6 +118,38 @@ public class App
         }
     }
 
+    public List<City> getCitiesByPopulation() {
+        List<City> cities = new ArrayList<>();
+        try {
+            Statement stmt = con.createStatement();
+            String strSelect = "SELECT city.Name, country.Name AS CountryName, city.District, city.Population "
+                    + "FROM city "
+                    + "JOIN country ON city.CountryCode = country.Code "
+                    + "ORDER BY Population DESC";
+            ResultSet rset = stmt.executeQuery(strSelect);
+            while (rset.next()) {
+                City city = new City();
+                city.name = rset.getString("Name");
+                city.country = rset.getString("CountryName");
+                city.district = rset.getString("District");
+                city.population = rset.getInt("Population");
+                cities.add(city);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get city information");
+        }
+        return cities;
+    }
+
+    public void displayCities(List<City> cities) {
+        System.out.println("Name | Country | District | Population");
+        for (City city : cities) {
+            System.out.println(city.name + " | " + city.country + " | " + city.district + " | " + city.population);
+        }
+    }
+
+
     public static void main(String[] args)
     {
         // Create new Application
@@ -128,9 +160,14 @@ public class App
 
         // Get countries ordered by population
         List<Country> countries = a.getCountriesByPopulation();
-
+        System.out.println("Country Report:");
         // Display countries information
         a.displayCountries(countries);
+
+        // Get cities ordered by population
+        List<City> cities = a.getCitiesByPopulation();
+        System.out.println("\nCity Report:");
+        a.displayCities(cities);
 
         // Disconnect from database
         a.disconnect();
