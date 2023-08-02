@@ -13,7 +13,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
-      - D:\cyber\Documents\BSc Games Development\Year 2 - Trimester 2\Software Engineering Methods\Coursework RESIT\world-db
+      - "D:/cyber/Documents/BSc Games Development/Year 2 - Trimester 2/Software Engineering Methods/Coursework RESIT/world-db:/docker-entrypoint-initdb.d"
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     networks:
